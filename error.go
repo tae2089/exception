@@ -9,13 +9,17 @@ import (
 type ErrorCode int
 
 const (
-	ErrorBadRequest         ErrorCode = 400
-	ErrorUnauthorized       ErrorCode = 401
-	ErrorForbidden          ErrorCode = 403
-	ErrorNotFound           ErrorCode = 404
+	ErrorJwtExpired         ErrorCode = 401
+	ErrorJwtInvalid         ErrorCode = 401
+	ErrorDataInvalid        ErrorCode = 400
+	ErrorInvalidCredentials ErrorCode = 401
 	ErrorInternalServer     ErrorCode = 500
-	ErrorNotImplemented     ErrorCode = 501
-	ErrorServiceUnavailable ErrorCode = 503
+	ErrorDataNotFound       ErrorCode = 404
+	ErrorUnAuthorized       ErrorCode = 401
+	ErrorUserNotFound       ErrorCode = 404
+	ErrorUserExists         ErrorCode = 409
+	ErrorInternalDB         ErrorCode = 500
+	ErrorInvalidRequest     ErrorCode = 400
 )
 
 type CustomError struct {
@@ -122,7 +126,7 @@ func WrapMessage(err error, msg string) error {
 
 func captureStackTrace() string {
 	var pcs [1]uintptr
-	n := runtime.Callers(3, pcs[:]) // 3을 사용하여 호출자의 호출자에서 시작
+	n := runtime.Callers(4, pcs[:]) // 3을 사용하여 호출자의 호출자에서 시작
 	if n == 0 {
 		return "unknown"
 	}
